@@ -36,7 +36,7 @@ def delete(cur,raw_info_list:list):
     # TODO: Update here according to your db
     pass
 
-def template_check(func)->True:
+def template_check(func,cur)->True:
     raw_info: str = input("Enter info for query \n")
     try:
         raw_info_list = raw_info.split(",")
@@ -47,7 +47,7 @@ def template_check(func)->True:
         logging.exception(WrongCommand(f" {WrongCommand.__name__} : Undefined query info\n"),exc_info=False,stack_info=False)
         return False
     try:
-        func(cur=cur,raw_info_list=raw_info_list)
+        func(cur,raw_info_list)
     except WrongCommand:
         logging.exception(WrongCommand(f" {WrongCommand.__name__} : Undefined query info\n"),exc_info=False,stack_info=False)
         return False
@@ -81,15 +81,15 @@ if __name__ == "__main__":
         if action in LOOK_UP_TABLE:
             match action:
                 case "add":
-                    if template_check(add):
+                    if template_check(add,cur):
                         print("\nQuery succesed")
                     continue
                 case "delete":
-                    if template_check(delete):
+                    if template_check(delete,cur):
                         print("\nQuery succesed")
                     continue
                 case "get":
-                    if template_check(get):
+                    if template_check(get,cur):
                         print("\nQuery succesed")
                     continue
                 case _ :
