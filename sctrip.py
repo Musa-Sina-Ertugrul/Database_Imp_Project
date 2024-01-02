@@ -13,10 +13,10 @@ LOOK_UP_TABLE = set([
 ])
 
 class WrongCommand(RuntimeError):
-    pass
+    logging.error(f"WrongCommand Exception: {RuntimeError}")
 
 class ConnectionFailure(RuntimeError):
-    pass
+    logging.error(f"ConnectionFailure Exception: {RuntimeError}")
 
 @jit(forceobj=True,nogil=True)
 def booting()-> None:
