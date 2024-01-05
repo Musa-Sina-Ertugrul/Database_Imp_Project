@@ -25,16 +25,23 @@ def booting()-> None:
         time.sleep(0.5)
 
 def get(cur,raw_info_list:list):
-    # TODO: Update here according to your db
-    pass
+    tweet_id = raw_info_list[0].strip()
+    cur.execute(f"SELECT * FROM tweets WHERE tweet_id = {tweet_id};")
+    result = cur.fetchone()
+    print(result) if result else print("Tweet not found.")
 
 def add(cur,raw_info_list:list):
-    # TODO: Update here according to your db
-    pass
+    tweet_id, created_at, text, retweet_count, tweet_source = map(str.strip, raw_info_list)
+    cur.execute(f"""
+        INSERT INTO tweets (tweet_id, created_at, text, retweet_count, tweet_source)
+        VALUES ({tweet_id}, '{created_at}', '{text}', {retweet_count}, '{tweet_source}');
+    """)
+    print("Tweet added successfully.")
 
 def delete(cur,raw_info_list:list):
-    # TODO: Update here according to your db
-    pass
+    tweet_id = raw_info_list[0].strip()
+    cur.execute(f"DELETE FROM tweets WHERE tweet_id = {tweet_id};")
+    print("Tweet deleted successfully.")
 
 def template_check(func,cur)->True:
     raw_info: str = input("Enter info for query \n")
@@ -61,7 +68,7 @@ if __name__ == "__main__":
     T.start()
 
     try:
-        conn=psycopg2.connect(database="enter_database_name",user="enter_username",password="enter_password")
+        conn=psycopg2.connect(database="twiXter",user="enter_username",password="enter_password")
     except ConnectionError or ConnectionFailure or psycopg2.OperationalError:
         T.join()
         logging.exception(ConnectionFailure(f" {ConnectionFailure.__name__} Connection Error"),exc_info=False,stack_info=False)
